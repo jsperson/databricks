@@ -101,12 +101,21 @@
 
 -- COMMAND ----------
 
--- TODO
-CREATE OR REPLACE TEMP VIEW events_pivot
-<FILL_IN>
-("cart", "pillows", "login", "main", "careers", "guest", "faq", "down", "warranty", "finalize", 
-"register", "shipping_info", "checkout", "mattresses", "add_item", "press", "email_coupon", 
-"cc_info", "foam", "reviews", "original", "delivery", "premium")
+CREATE OR REPLACE TEMP VIEW events_pivot AS
+SELECT *
+FROM (
+  SELECT user_id as user, event_name, count(*) as event_count
+  FROM events
+  GROUP BY user_id, event_name
+)
+PIVOT (
+  SUM(event_count)
+  FOR event_name IN ('cart', 'pillows', 'login', 'main', 'careers', 'guest', 'faq', 'down', 'warranty', 'finalize', 'register', 'shipping_info', 'checkout', 'mattresses', 'add_item', 'press', 'email_coupon', 'cc_info', 'foam', 'reviews', 'original', 'delivery', 'premium')
+)
+
+-- COMMAND ----------
+
+SELECT * FROM events_pivot LIMIT 10
 
 -- COMMAND ----------
 
@@ -182,7 +191,10 @@ CREATE OR REPLACE TEMP VIEW events_pivot
 
 -- TODO
 CREATE OR REPLACE TEMP VIEW clickpaths AS
-<FILL_IN>
+SELECT ep.*, t.*
+FROM events_pivot ep
+INNER JOIN transactions t
+ON ep.user = t.user_id
 
 -- COMMAND ----------
 
@@ -190,6 +202,10 @@ CREATE OR REPLACE TEMP VIEW clickpaths AS
 -- MAGIC %md
 -- MAGIC
 -- MAGIC ### Solve with Python
+
+-- COMMAND ----------
+
+SELECT * from clickpaths LIMIT 10
 
 -- COMMAND ----------
 
