@@ -25,6 +25,12 @@ CREATE EXTERNAL LOCATION IF NOT EXISTS dea_course_ext_dl_gizmobox
 
 -- COMMAND ----------
 
+CREATE EXTERNAL LOCATION IF NOT EXISTS deacourseextdljsp_gizmobox
+    URL 'abfss://gizmobox@deacourseextdljsp.dfs.core.windows.net/'
+    WITH (STORAGE CREDENTIAL
+
+-- COMMAND ----------
+
 -- MAGIC %md
 -- MAGIC ### 3. Create the catalog - gizmobox
 
